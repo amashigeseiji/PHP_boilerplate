@@ -27,7 +27,7 @@ services:
        - ./src:/var/www/html
 
    app:
-     image: php:7.2-fpm-alpine
+     build: ./app
      depends_on:
        - db
      ports:
