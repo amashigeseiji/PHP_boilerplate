@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+   db:
+     image: mysql:5.7
+     volumes:
+       - ./db_data:/var/lib/mysql
+     restart: always
+     ports:
+       - "3306:3306"
+     env_file: .env
+     environment:
+       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+       MYSQL_DATABASE: ${MYSQL_DATABASE}
+       MYSQL_USER: ${MYSQL_USER}
+       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+
+   web:
+     image: nginx:1-alpine
+     restart: always
+     depends_on:
+       - app
+     ports:
+       - "8080:80"
+     volumes:
+       - ./web/default.conf:/etc/nginx/conf.d/default.conf
+       - ./src:/var/www/html
+
+   app:
+     image: php:7.2-fpm-alpine
+     depends_on:
+       - db
+     ports:
+       - "9000:9000"
+     restart: always
+     volumes:
+       - ./src:/var/www/html
+     environment:
+       DATABASE_HOST: db
+
+
+volumes:
+    db_data:
