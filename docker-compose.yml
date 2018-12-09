@@ -35,8 +35,6 @@ services:
      restart: always
      volumes:
        - ./src:/var/www/html
-     environment:
-       DATABASE_HOST: db
 
 
 volumes:
